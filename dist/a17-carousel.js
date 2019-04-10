@@ -1,12 +1,12 @@
 /*
-  a17_slider
+  a17_carousel
   v2.0.0
 
 */
 (function () {
   'use strict';
 
-  var a17_slider = function(options) {
+  var a17_carousel = function(options) {
 
     var defaults = {
       sliderContainer: undefined,
@@ -39,8 +39,8 @@
     var preventClicks = false;
     var automationHalted = false;
     var rtl = a17S("html[dir=rtl]",document).length == 0 ? false : true;
-    var dataAttr = "data-a17_slider-position";
-    var dupeAttr = "data-a17_slider-dupe";
+    var dataAttr = "data-a17_carousel-position";
+    var dupeAttr = "data-a17_carousel-dupe";
     var missing_lis = 0; // if scrolling by set and total number of items isn't a multiple of how many items visible
     var this_instance_params, original_node, currentSliderPos, paginator, nextBtn, prevBtn, totalLi, maxSet, timer, slides, slidesWidths, middleItem, totalWidth, xDown, yDown, xDiff, yDiff, animationFrame;
 
@@ -55,7 +55,7 @@
 
       if (this_instance_params.sliderContainer == undefined || this_instance_params.sliderInner == undefined || this_instance_params.paginator == undefined ) {
         if (typeof console === "object") {
-          console.warn("a17_slider: no sliderContainer, sliderInner or paginator specified");
+          console.warn("a17_carousel: no sliderContainer, sliderInner or paginator specified");
         }
         return;
       }
@@ -892,10 +892,10 @@
 
   if (typeof exports !== 'undefined') {
     // Node.js
-    module.exports = a17_slider;
+    module.exports = a17_carousel;
   } else {
     // Browser
-    window.a17_slider = a17_slider;
+    window.a17_carousel = a17_carousel;
   }
 
 })();
