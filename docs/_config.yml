@@ -20,7 +20,7 @@
 
 title: A17 Carousel
 email: dev@area17.com
-description: IE9+, touch friendly, vanilla JavaScript, no dependency carousel
+description: A dependency free, vanilla, multifunction carousel - by A17
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: area17__
