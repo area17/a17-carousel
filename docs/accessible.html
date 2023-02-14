@@ -1,0 +1,107 @@
+---
+title: Accessibility
+---
+{% include_relative includes/_header.html %}
+
+      <div class="features" data-behavior="features">
+        <ul class="slider">
+          <li>
+            <div class="img"><img src="./assets/images/960/01.jpg"></div>
+            <div class="title"><a href="#">Link 1</a></div>
+          </li>
+          <li>
+            <div class="img"><img src="./assets/images/960/02.jpg"></div>
+            <div class="title"><a href="#">Link 2</a></div>
+          </li>
+          <li>
+            <div class="img"><img src="./assets/images/960/03.jpg"></div>
+            <div class="title"><a href="#">Link 3</a></div>
+          </li>
+          <li>
+            <div class="img"><img src="./assets/images/960/04.jpg"></div>
+            <div class="title"><a href="#">Link 4</a></div>
+          </li>
+        </ul>
+        <ul class="paginator">
+          <li class="next"><a href="#">&rarr;</a></li>
+          <li class="prev"><a href="#">&larr;</a></li>
+        </ul>
+      </div>
+      <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: document.querySelectorAll(".features")[0],
+  sliderInner: document.querySelectorAll(".features ul.slider")[0],
+  paginator: document.querySelectorAll(".features ul.paginator")[0]
+});</code></pre>
+
+    <div class="related" data-behavior="related">
+      <ul class="slider">
+        <li>
+          <div class="img"><img src="./assets/images/960/01.jpg"></div>
+          <div class="title"><a href="#">Link 1</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/02.jpg"></div>
+          <div class="title"><a href="#">Link 2</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/03.jpg"></div>
+          <div class="title"><a href="#">Link 3</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/04.jpg"></div>
+          <div class="title"><a href="#">Link 4</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/05.jpg"></div>
+          <div class="title"><a href="#">Link 5</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/06.jpg"></div>
+          <div class="title"><a href="#">Link 6</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/07.jpg"></div>
+          <div class="title"><a href="#">Link 7</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/08.jpg"></div>
+          <div class="title"><a href="#">Link 8</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/09.jpg"></div>
+          <div class="title"><a href="#">Link 9</a></div>
+        </li>
+        <li>
+          <div class="img"><img src="./assets/images/960/10.jpg"></div>
+          <div class="title"><a href="#">Link 10</a></div>
+        </li>
+      </ul>
+      <ul class="pager">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var related_slider = new a17_slider({
+sliderContainer: container,
+sliderInner: container.querySelectorAll("ul.slider")[0],
+paginator: container.querySelectorAll("ul.pager")[0],
+itemsVisible: 4,
+scrollBySet: true,
+keyControls: false,
+paginatorClassname: "pager"
+});</code></pre>
+
+{% include_relative includes/_footer.html %}
+  </body>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script src="./assets/js/vendor/a17_slider.js"></script>
+  <script src="./assets/js/application.js"></script>
+  <script src="./assets/js/behaviors/related.js"></script>
+  <script>
+  var features_slider = new a17_slider({
+    sliderContainer: document.querySelectorAll(".features")[0],
+    sliderInner: document.querySelectorAll(".features ul.slider")[0],
+    paginator: document.querySelectorAll(".features ul.paginator")[0]
+  });
+  </script>
+</html>

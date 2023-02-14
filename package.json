@@ -1,17 +1,17 @@
 {
   "name": "@area17/a17-carousel",
   "description": "A dependency free, vanilla, multifunction carousel - by A17",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "main": "./dist/a17-carousel.js",
   "bugs": {
-    "url": "https://code.area17.com/a17/a17-carousel/issues"
+    "url": "https://github.com/area17/a17-carousel/issues"
   },
-  "homepage": "http://slider.dev.area17.com/",
+  "homepage": "https://github.com/area17/a17-carousel",
   "author": "A17 <dev@area17.com> (https://area17.com/)",
   "repository": {
     "type": "git",
-    "url": "https://code.area17.com/a17/a17-carousel"
+    "url": "https://github.com/area17/a17-carousel"
   },
   "devDependencies": {
     "terser": "^3.17.0"

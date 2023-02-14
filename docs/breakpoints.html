@@ -1,0 +1,81 @@
+---
+title: Responsive
+---
+{% include_relative includes/_header.html %}
+
+      <div class="related" data-behavior="breakpoints">
+        <ul class="slider">
+          <li><img src="./assets/images/240/01.jpg"></li>
+          <li><img src="./assets/images/240/02.jpg"></li>
+          <li><img src="./assets/images/240/03.jpg"></li>
+          <li><img src="./assets/images/240/04.jpg"></li>
+          <li><img src="./assets/images/240/05.jpg"></li>
+          <li><img src="./assets/images/240/06.jpg"></li>
+          <li><img src="./assets/images/240/07.jpg"></li>
+          <li><img src="./assets/images/240/08.jpg"></li>
+          <li><img src="./assets/images/240/09.jpg"></li>
+          <li><img src="./assets/images/240/10.jpg"></li>
+        </ul>
+        <ul class="pager">
+          <li class="next"><a href="#">&rarr;</a></li>
+          <li class="prev"><a href="#">&larr;</a></li>
+        </ul>
+      </div>
+      <p>As the page shrinks in width, it shows 4, then 3, then 2 and finally just 1 slide at a time.</p>
+      <pre><code class="language-javascript">var related_slider, width, timer, itemsVisible, quickLinks;
+
+function init_slider(w) {
+  width = w;
+
+  switch (width) {
+    case 960:
+      itemsVisible = 4;
+      quickLinks = true;
+      break;
+    case 720:
+      itemsVisible = 3;
+      quickLinks = true;
+      break;
+    case 480:
+      itemsVisible = 2;
+      quickLinks = true;
+      break;
+    default:
+      itemsVisible = 1;
+      quickLinks = false;
+  }
+
+  related_slider = new a17_slider({
+    sliderContainer: document.querySelectorAll(".related")[0],
+    sliderInner: document.querySelectorAll(".related > .slider")[0],
+    paginator: document.querySelectorAll(".related > .pager")[0],
+    itemsVisible: itemsVisible,
+    scrollBySet: true,
+    quickLinks: quickLinks
+  });
+}
+
+function reinit_slider() {
+  var new_width = container.offsetWidth;
+  if (new_width != width) {
+    related_slider.destroy();
+    init_slider(new_width);
+  }
+}
+
+window.addEventListener("resize",function(){
+  clearTimeout(timer);
+  timer = setTimeout(function(){
+    reinit_slider();
+  },250);
+},false);
+
+init_slider(container.offsetWidth);</code></pre>
+
+{% include_relative includes/_footer.html %}
+  </body>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script src="./assets/js/vendor/a17_slider.js"></script>
+  <script src="./assets/js/application.js"></script>
+  <script src="./assets/js/behaviors/breakpoints.js"></script>
+</html>

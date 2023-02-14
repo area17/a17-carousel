@@ -1,0 +1,31 @@
+---
+title: A17 Slider with <a href="http://kenwheeler.github.io/cash/" target="_blank">Cash.js</a>
+---
+{% include_relative includes/_header.html %}
+
+      <div class="features" data-behavior="cash">
+        <ul class="slider">
+          <li><img src="./assets/images/960/01.jpg"></li>
+          <li><img src="./assets/images/960/02.jpg"></li>
+          <li><img src="./assets/images/960/03.jpg"></li>
+          <li><img src="./assets/images/960/04.jpg"></li>
+        </ul>
+        <ul class="paginator">
+          <li class="next"><a href="#">&rarr;</a></li>
+          <li class="prev"><a href="#">&larr;</a></li>
+        </ul>
+      </div>
+      <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: $(".features")[0],
+  sliderInner: $(".features .slider")[0],
+  paginator: $(".features .paginator")[0]
+});</code></pre>
+
+{% include_relative includes/_footer.html %}
+  </body>
+  <script src="./assets/js/vendor/cash.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script src="./assets/js/vendor/a17_slider.js"></script>
+  <script src="./assets/js/application.js"></script>
+  <script src="./assets/js/behaviors/cash.js"></script>
+</html>

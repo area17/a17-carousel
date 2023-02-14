@@ -1,0 +1,37 @@
+#sliderjs {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+}
+
+.features {
+  width: 100%;
+  max-width: 960px;
+  height: 0;
+  padding: 0 0 56.5%;
+}
+  .features .slider li {
+    position: relative;
+    width: auto;
+    max-width: 960px;
+    height: 0;
+    padding-bottom: 56.25%;
+  }
+  .features .slider img {
+    position: absolute;
+    left: 0; right: 0; top: 0; bottom: 0;
+    width: 100%; height: auto;
+  }
+
+.features .paginator {
+  padding-top: 52%;
+}
+  .features .paginator .next a,
+  .features .paginator .prev a {
+    width: 100px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    margin-top: -16px;
+    line-height: 1;
+  }

@@ -1,0 +1,46 @@
+#sliderjs {
+  padding: 20px;
+  width: 1000px;
+}
+
+@media (max-width: 1023px) {
+  #sliderjs {
+    width: 760px;
+  }
+  .related {
+    width: 720px;
+  }
+
+}
+
+@media (max-width: 767px) {
+  #sliderjs {
+    width: 520px;
+  }
+  .related {
+    width: 480px;
+  }
+}
+
+
+@media (max-width: 520px) {
+  #sliderjs {
+    width: 320px;
+  }
+  .related,
+  .related .slider li,
+  .related .slider img {
+    width: 280px;
+  }
+
+  .related .slider li,
+  .related .slider img {
+    height: 158px;
+  }
+
+}
+
+.related .pager .next,
+.related .pager .prev {
+  width: 60px;
+}

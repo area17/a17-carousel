@@ -1,0 +1,550 @@
+---
+index: true
+title: A17 Carousel
+---
+{% include_relative includes/_header.html %}
+
+      <p><b>v1.0.2</b></p>
+      <p><a href="https://github.com/area17/a17-carousel">Get source from GitHub</a></p>
+      <p>IE9+, touch friendly, vanilla JavaScript, no dependences, 31kb or 11kb minified - 3kb gzipped</p>
+      <p>You can have 1 thing in a set, lots of things in a set, looping or not looping and automated or not. For looping in sets it will add blank <code>&lt;li class="a17s_blank"&gt;</code> to the slider list to keep the numbers even. The slider list class is up to you. It draws in paginator li's to jump to sets, to the beginning of <code>&lt;ul class="paginator"&gt;</code> (or whatever class name you put on the paginator). For the current set state, it puts a class of current on the <code>&lt;li&gt;</code>. It responds to swipes with a definable threshold.</p>
+      <p>This is a big dumb slider, in that it clones and adds markup on initialisation and not on slide request - so it re-writes the markup and adds to your DOM.</p>
+      <ul>
+        <li>It updates the <code>transform: translateX()</code> value of the slider</li>
+        <li>Adds and removes a <code>class</code> of <code>a17s_visible</code> to visible items</li>
+        <li>Handles <code>html[dir=rtl]</code> nicely</li>
+        <li>Plays nice with <a href="./jquery.html">jQuery</a>, <a href="./cash.html">cash.js</a> and <a href="./min.html">min.js</a></li>
+        <li><a href="./accessible.html">Tabbable</a></li>
+      </ul>
+
+      <h2>Example</h2>
+
+      <p>Looping carousel, with methods, event listeners and keyboard controls. <a href="#more_examples">More examples.</a></p>
+
+      <div class="features" data-behavior="features">
+        <ul class="slider">
+          <li><img src="./assets/images/960/01.jpg"></li>
+          <li><img src="./assets/images/960/02.jpg"></li>
+          <li><img src="./assets/images/960/03.jpg"></li>
+          <li><img src="./assets/images/960/04.jpg"></li>
+        </ul>
+        <ul class="paginator">
+          <li class="next"><a href="#">&rarr;</a></li>
+          <li class="prev"><a href="#">&larr;</a></li>
+        </ul>
+      </div>
+      <p><a href="#" id="destroy">Destroy</a> - <a href="#" id="next">Next</a> - <a href="#" id="show3rd">Show 3rd item</a> - <a href="#" id="alert">Alert current set</a> - <a href="#" id="reinit">Re-init</a></p>
+      <p>If you slide the slider, destroy and then re-init, it will return the slider to the position you left it in.</p>
+      <pre><code class="language-javascript">var features_slider;
+var starting_position = 1;
+
+function init_slider() {
+  features_slider = new a17_slider({
+    sliderContainer: container,
+    sliderInner: container.querySelectorAll("ul.slider")[0],
+    paginator: container.querySelectorAll("ul.paginator")[0],
+    currentSet: starting_position
+  });
+}
+
+document.getElementById("destroy").addEventListener("click",function(event){
+  event.preventDefault();
+  if (features_slider !== undefined) {
+    features_slider.destroy();
+  }
+},false);
+
+document.getElementById("next").addEventListener("click",function(event){
+  event.preventDefault();
+  features_slider.move("right");
+},false);
+
+document.getElementById("show3rd").addEventListener("click",function(event){
+  event.preventDefault();
+  features_slider.move(3);
+},false);
+
+document.getElementById("alert").addEventListener("click",function(event){
+  event.preventDefault();
+  alert(features_slider.currentSet());
+},false);
+
+document.getElementById("reinit").addEventListener("click",function(event){
+  event.preventDefault();
+  if (features_slider.destroy === undefined) {
+    init_slider();
+  }
+},false);
+
+container.addEventListener("slider_setup_complete",function(event){
+  console.log("slider_setup_complete",event.data);
+});
+container.addEventListener("slider_moving",function(event){
+  console.log("slider_moving",event.data);
+});
+container.addEventListener("slider_moved",function(event){
+  console.log("slider_moved",event.data);
+});
+container.addEventListener("slider_destroyed",function(event){
+  console.log("slider_destroyed",event.data);
+  starting_position = event.data.currentSet;
+});
+
+init_slider();</code></pre>
+
+      <h2>Set Up</h2>
+      <h3>HTML</h3>
+      <pre><code class="language-html">&lt;div&gt;
+  &lt;ul class="slider"&gt;
+      &lt;li&gt;...&lt;/li&gt;
+      &lt;li&gt;...&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;ul class="paginator"&gt;
+    &lt;li class="prev"&gt;&lt;a href="#"&gt;Prev&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="next"&gt;&lt;a href="#"&gt;Next&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+      <h3>CSS</h3>
+      <pre><code class="language-css">.features {
+  width: 960px;
+  height: 540px;
+  overflow: hidden;
+}
+.slider {
+  width: 9999em;
+  height: 540px;
+  overflow: hidden;
+}
+.slider.a17s_transition {
+  -webkit-transition: -webkit-transform .25s ease;
+  transition: transform .25s ease;
+}</code></pre>
+      <p>The <code>.a17s_transition</code> class is added and removed by the function as needed.</p>
+
+      <h2>Options</h2>
+      <pre><code class="language-javascript">sliderContainer: undefined, // DOM node, required
+sliderInner: undefined, // DOM node, required
+paginator: undefined, // DOM node, required
+slideAmount: undefined, // number, or defaults to sliderContainer.offsetWidth
+itemsVisible: 1, // number, defaults to 1
+scrollBySet: false, // boolean, defaults to false
+cloneAll: false, // boolean, defaults to false
+currentSet: 1, // number, defaults to 1
+budge: 0, // number, defaults to 0, initial offset left
+centered: false, // boolean, defaults to false
+looping: true, // boolean, defaults to true
+automate: false, // boolean, defaults to false
+interval: 5000, // false or number in seconds, defaults to 5000ms
+quickLinks: true, // boolean, defaults to true
+speed: 250, // number, should match your CSS transition time
+quickLinksChar: "bull", // "bull" or "numeric"
+keyControls: true, // boolean, defaults to true
+swipable: true, // boolean, defaults to true
+swipeThreshold: 150, // number, defaults to 150</code></pre>
+
+      <dl>
+        <dt><code>sliderContainer</code></dt>
+          <dd>node of the container for the slider</dd>
+        <dt><code>sliderInner</code></dt>
+          <dd>node of the slider itself</dd>
+        <dt><code>paginator</code></dt>
+          <dd>node of the paginator</dd>
+        <dt><code>slideAmount</code></dt>
+          <dd>distance to slide. Setting a slideAmount of less than the slider containers width enabled cloneAll and looping. Setting slideAmount to "mixed" enabled looping, cloneAll, sets itemsVisible to 1 and disabled scrollBySet.</dd>
+        <dt><code>itemsVisible</code></dt>
+          <dd>how many slides visible at once</dd>
+        <dt><code>scrollBySet</code></dt>
+          <dd>set to true if you want to scroll by more than 1 item at once</dd>
+        <dt><code>cloneAll</code></dt>
+          <dd>By default the function tries to clone the least amount of things as possible to do the infinite looping trick but sometimes you might want it just to clone everything - stops overflow visible type lists having a jump as the end is reached and the reset happens. See <a href="#cloneAll">Looping carousel by set of 2, with budge, no quicklinks</a> below</dd>
+        <dt><code>currentSet</code></dt>
+          <dd>starting position</dd>
+        <dt><code>budge</code></dt>
+          <dd>initial indent from left of slider container</dd>
+        <dt><code>centered</code></dt>
+          <dd>if slides are less that full width, they can be auto centered</dd>
+        <dt><code>looping</code></dt>
+          <dd>infinite loop slider</dd>
+        <dt><code>automate</code></dt>
+          <dd>automatically progressing slider. Setting automate to true enables looping.</dd>
+        <dt><code>interval</code></dt>
+          <dd>interval between auto slides if automate is true</dd>
+        <dt><code>quickLinks</code></dt>
+          <dd>display pagination links</dd>
+        <dt><code>keyControls</code></dt>
+          <dd>keyboard controllable. <b>Only set one slider per page to have keyboard controls.</b></dd>
+        <dt><code>swipable</code></dt>
+          <dd>can be dragged or swiped by mouse or touch events</dd>
+        <dt><code>swipeThreshold</code></dt>
+          <dd>beyond the threshold during a swipe, will auto move to next/prev slide on swipe end</dd>
+      </dl>
+
+      <h2>Basic set up</h2>
+      <pre><code class="language-javascript">var $container = document.querySelectorAll(".features_slider")[0];
+var $slider = document.querySelectorAll("ul.slider")[0];
+var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: $slider,
+  slideAmount: 960
+});</code></pre>
+      <p>The JS is expecting a nodes and not jQuery objects etc.</p>
+
+      <h2>Methods</h2>
+      <dl>
+        <dt><code>move</code><br>(direction or position)</dt>
+          <dd><code>features_slider.move("left");
+features_slider.move("right");
+features_slider.move(2);</code><br>
+          You can specify a direction or an index. "right" is equivalent to hitting the "next" button. The index is not 0 based the first index is either the first item shown or the first set of things shown, the second index is either the second item or the second set of things shown.</dd>
+        <dt><code>currentSet</code></dt>
+          <dd><code>features_slider.currentSet()</code><br>
+            Returns the current set in the slider.</dd>
+        <dt><code>maxSet</code></dt>
+          <dd><code>features_slider.maxSet()</code><br>
+              Returns the maximum set for the slider.</dd>
+        <dt><code>destroy</code></dt>
+          <dd><code>features_slider.destroy()</code><br>Resets the slider to its original state using a clone of the original node.</dd>
+      </dl>
+
+      <h2>Emitted events</h2>
+      <dl>
+        <dt><code>slider_setup_complete</code></dt>
+          <dd>Emitted when slider set up is complete</dd>
+        <dt><code>slider_moving</code></dt>
+          <dd>Emitted when slider starts to move</dd>
+        <dt><code>slider_moved</code></dt>
+          <dd>Emitted when sliding completes</dd>
+        <dt><code>slider_destroyed</code></dt>
+          <dd>Emitted when slider instance has been destroyed</dd>
+      </dl>
+      <p>Each returns some slider info into the event:</p>
+      <dl>
+        <dt><code><code>event.data.container</code></code></dt>
+          <dd>the node that something happened to, same as <code>sliderContainer</code></dd>
+        <dt><code><code>event.data.currentSet</code></code></dt>
+          <dd>The currently visible item or set of items</dd>
+      </dl>
+
+      <h2>Responsive?</h2>
+      <p>No. The slider is only concerned with the carousel functions as I see resizing as an edge case. Application specific stuff, such as handling resize or breakpoints you should deal with in your application js. On complete of resize/breakpoint crossing destroy the slider instance and re-init it. <br><a href="./fluid.html">Fluid example</a> - <a href="./breakpoints.html">Breakpoints example</a>.</p>
+
+      <h2>Note:</h2>
+      <p>Certain options switch other options.</p>
+      <ul>
+        <li>If "automate: true" then looping will automatically be set to true, to so the slider can automate indefinitely</li>
+        <li>If "slideAmount: 'mixed'" then looping and cloneAll will be set to true, itemsVisible will be set to 1 and scrollBySet will be set to false</li>
+        <li>If the "slideAmount" is narrower than the "sliderContainer" width, then cloneAll and looping are set to true</li>
+        <li>If "currentSet" is set to a number larger than the calculated maximum set, then it will be set to 1</li>
+        <li>If "scrollBySet" is true but items "itemsVisible" is 1, "scrollBySet" will be reset to 1.</li>
+        <li>If "scrollBySet" is true or "itemsVisible" is over 1, "centered" will be set to false.</li>
+      </ul>
+
+    <h2 id="more_examples">More examples</h2>
+
+    <h3>Non-looping carousel</h3>
+
+    <div class="features" data-behavior="features_nonloop">
+      <ul class="slider">
+        <li><img src="./assets/images/960/01.jpg"></li>
+        <li><img src="./assets/images/960/02.jpg"></li>
+        <li><img src="./assets/images/960/03.jpg"></li>
+        <li><img src="./assets/images/960/04.jpg"></li>
+      </ul>
+      <ul class="paginator">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  keyControls: false,
+  looping: false
+});</code></pre>
+
+
+    <h3>Carousel, starting position 2</h3>
+
+    <div class="features" data-behavior="features_start2nd">
+      <ul class="slider">
+        <li><img src="./assets/images/960/01.jpg"></li>
+        <li><img src="./assets/images/960/02.jpg"></li>
+        <li><img src="./assets/images/960/03.jpg"></li>
+        <li><img src="./assets/images/960/04.jpg"></li>
+      </ul>
+      <ul class="paginator">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  currentSet: 2
+});</code></pre>
+
+
+      <h3>Automated looping carousel</h3>
+
+      <div class="features" data-behavior="features_auto">
+        <ul class="slider">
+          <li><img src="./assets/images/960/01.jpg"></li>
+          <li><img src="./assets/images/960/02.jpg"></li>
+          <li><img src="./assets/images/960/03.jpg"></li>
+          <li><img src="./assets/images/960/04.jpg"></li>
+        </ul>
+        <ul class="paginator">
+          <li class="next"><a href="#">&rarr;</a></li>
+          <li class="prev"><a href="#">&larr;</a></li>
+        </ul>
+      </div>
+      <p>With numbers rather than &bull; in the quick links. Hovering over the slider halts the auto timer.</p>
+      <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  keyControls: false,
+  automate: true,
+  interval: 5,
+  quickLinksChar: "numeric"
+});</code></pre>
+
+      <h3>Looping carousel by set of 4, number of items not divisible by 4</h3>
+
+      <div class="related" data-behavior="related">
+        <ul class="slider">
+          <li><img src="./assets/images/240/01.jpg"><span class="title">1</span></li>
+          <li><img src="./assets/images/240/02.jpg"><span class="title">2</span></li>
+          <li><img src="./assets/images/240/03.jpg"><span class="title">3</span></li>
+          <li><img src="./assets/images/240/04.jpg"><span class="title">4</span></li>
+          <li><img src="./assets/images/240/05.jpg"><span class="title">5</span></li>
+          <li><img src="./assets/images/240/06.jpg"><span class="title">6</span></li>
+          <li><img src="./assets/images/240/07.jpg"><span class="title">7</span></li>
+          <li><img src="./assets/images/240/08.jpg"><span class="title">8</span></li>
+          <li><img src="./assets/images/240/09.jpg"><span class="title">9</span></li>
+          <li><img src="./assets/images/240/10.jpg"><span class="title">10</span></li>
+        </ul>
+        <ul class="pager">
+          <li class="next"><a href="#">&rarr;</a></li>
+          <li class="prev"><a href="#">&larr;</a></li>
+        </ul>
+      </div>
+      <p>If number of slides doesn't divide nicely by how many items are visible, no problem.</p>
+      <pre><code class="language-javascript">var related_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.pager")[0],
+  itemsVisible: 4,
+  scrollBySet: true,
+  keyControls: false,
+  paginatorClassname: "pager"
+});</code></pre>
+
+      <h3>Non-looping carousel by set of 4, number of items not divisible by 4</h3>
+
+      <div class="related" data-behavior="related_nonloop">
+        <ul class="slider">
+          <li><img src="./assets/images/240/01.jpg"><span class="title">1</span></li>
+          <li><img src="./assets/images/240/02.jpg"><span class="title">2</span></li>
+          <li><img src="./assets/images/240/03.jpg"><span class="title">3</span></li>
+          <li><img src="./assets/images/240/04.jpg"><span class="title">4</span></li>
+          <li><img src="./assets/images/240/05.jpg"><span class="title">5</span></li>
+          <li><img src="./assets/images/240/06.jpg"><span class="title">6</span></li>
+          <li><img src="./assets/images/240/07.jpg"><span class="title">7</span></li>
+          <li><img src="./assets/images/240/08.jpg"><span class="title">8</span></li>
+          <li><img src="./assets/images/240/09.jpg"><span class="title">9</span></li>
+          <li><img src="./assets/images/240/10.jpg"><span class="title">10</span></li>
+        </ul>
+        <ul class="pager">
+          <li class="next"><a href="#">&rarr;</a></li>
+          <li class="prev"><a href="#">&larr;</a></li>
+        </ul>
+      </div>
+      <pre><code class="language-javascript">var related_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.pager")[0],
+  itemsVisible: 4,
+  scrollBySet: true,
+  keyControls: false,
+  paginatorClassname: "pager",
+  looping: false
+});</code></pre>
+
+    <h3 id="cloneAll">Looping carousel by set of 2, with budge, no quicklinks, cloneAll true</h3>
+
+    <div class="related" data-behavior="related_budge">
+      <ul class="slider">
+        <li><img src="./assets/images/240/01.jpg"></li>
+        <li><img src="./assets/images/240/02.jpg"></li>
+        <li><img src="./assets/images/240/03.jpg"></li>
+        <li><img src="./assets/images/240/04.jpg"></li>
+        <li><img src="./assets/images/240/05.jpg"></li>
+        <li><img src="./assets/images/240/06.jpg"></li>
+        <li><img src="./assets/images/240/07.jpg"></li>
+        <li><img src="./assets/images/240/08.jpg"></li>
+        <li><img src="./assets/images/240/09.jpg"></li>
+        <li><img src="./assets/images/240/10.jpg"></li>
+      </ul>
+      <ul class="paginator">
+        <li class="next"><a href="#">Next</a></li>
+        <li class="prev"><a href="#">Prev</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var related_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  slideAmount: 480,
+  itemsVisible: 2,
+  scrollBySet: true,
+  keyControls: false,
+  cloneAll: true,
+  budge: 240
+});</code></pre>
+
+    <h3>Narrow LI's</h3>
+
+    <div class="features features_narrow" data-behavior="features_narrow">
+      <ul class="slider">
+        <li><img src="./assets/images/720/01.jpg"></li>
+        <li><img src="./assets/images/720/02.jpg"></li>
+        <li><img src="./assets/images/720/03.jpg"></li>
+        <li><img src="./assets/images/720/04.jpg"></li>
+      </ul>
+      <ul class="paginator">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  slideAmount: 720,
+  keyControls: false,
+  automate: false
+});</code></pre>
+
+    <h3>Narrow LI's centered with visible class being used</h3>
+
+    <div class="features features_narrow with_visible" data-behavior="features_narrow_centered">
+      <ul class="slider">
+        <li><img src="./assets/images/720/01.jpg"></li>
+        <li><img src="./assets/images/720/02.jpg"></li>
+        <li><img src="./assets/images/720/03.jpg"></li>
+        <li><img src="./assets/images/720/04.jpg"></li>
+      </ul>
+      <ul class="paginator">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  slideAmount: 720,
+  keyControls: false,
+  automate: false,
+  centered: true
+});</code></pre>
+
+    <h3>Varying width li's</h3>
+
+    <div class="features" data-behavior="features_mixed">
+      <ul class="slider">
+        <li width="600" style="width:600px;"><img src="./assets/images/960/01.jpg" width="600" style="width:600px;"></li>
+        <li width="400" style="width:400px;"><img src="./assets/images/960/02.jpg" width="400" style="width:400px;"></li>
+        <li width="300" style="width:300px;"><img src="./assets/images/960/03.jpg" width="300" style="width:300px;"></li>
+        <li width="500" style="width:500px;"><img src="./assets/images/960/04.jpg" width="500" style="width:500px;"></li>
+      </ul>
+      <ul class="paginator">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  slideAmount: "mixed",
+  keyControls: false,
+  automate: false
+});</code></pre>
+
+    <h3>Varying width li's, centered</h3>
+
+    <div class="features" data-behavior="features_mixed_centered">
+      <ul class="slider">
+        <li width="600" style="width:600px;"><img src="./assets/images/960/01.jpg" width="600" style="width:600px;"></li>
+        <li width="400" style="width:400px;"><img src="./assets/images/960/02.jpg" width="400" style="width:400px;"></li>
+        <li width="300" style="width:300px;"><img src="./assets/images/960/03.jpg" width="300" style="width:300px;"></li>
+        <li width="500" style="width:500px;"><img src="./assets/images/960/04.jpg" width="500" style="width:500px;"></li>
+      </ul>
+      <ul class="paginator">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var features_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.paginator")[0],
+  slideAmount: "mixed",
+  keyControls: false,
+  automate: false,
+  centered: true
+});</code></pre>
+
+
+    <h3>Looping carousel by set of 4, active class being used</h3>
+
+    <div class="related with_visible" data-behavior="related">
+      <ul class="slider">
+        <li><img src="./assets/images/240/01.jpg"><span class="title">1</span></li>
+        <li><img src="./assets/images/240/02.jpg"><span class="title">2</span></li>
+        <li><img src="./assets/images/240/03.jpg"><span class="title">3</span></li>
+        <li><img src="./assets/images/240/04.jpg"><span class="title">4</span></li>
+        <li><img src="./assets/images/240/05.jpg"><span class="title">5</span></li>
+        <li><img src="./assets/images/240/06.jpg"><span class="title">6</span></li>
+        <li><img src="./assets/images/240/07.jpg"><span class="title">7</span></li>
+        <li><img src="./assets/images/240/08.jpg"><span class="title">8</span></li>
+        <li><img src="./assets/images/240/09.jpg"><span class="title">9</span></li>
+        <li><img src="./assets/images/240/10.jpg"><span class="title">10</span></li>
+      </ul>
+      <ul class="pager">
+        <li class="next"><a href="#">&rarr;</a></li>
+        <li class="prev"><a href="#">&larr;</a></li>
+      </ul>
+    </div>
+    <pre><code class="language-javascript">var related_slider = new a17_slider({
+  sliderContainer: container,
+  sliderInner: container.querySelectorAll("ul.slider")[0],
+  paginator: container.querySelectorAll("ul.pager")[0],
+  itemsVisible: 4,
+  scrollBySet: true,
+  keyControls: false,
+  paginatorClassname: "pager"
+});</code></pre>
+
+{% include_relative includes/_footer.html %}
+  </body>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script src="./assets/js/vendor/a17_slider.js"></script>
+  <script src="./assets/js/application.js"></script>
+  <script src="./assets/js/behaviors/features.js"></script>
+  <script src="./assets/js/behaviors/features_auto.js"></script>
+  <script src="./assets/js/behaviors/features_nonloop.js"></script>
+  <script src="./assets/js/behaviors/features_start2nd.js"></script>
+  <script src="./assets/js/behaviors/features_narrow.js"></script>
+  <script src="./assets/js/behaviors/features_narrow_centered.js"></script>
+  <script src="./assets/js/behaviors/features_mixed.js"></script>
+  <script src="./assets/js/behaviors/features_mixed_centered.js"></script>
+  <script src="./assets/js/behaviors/related.js"></script>
+  <script src="./assets/js/behaviors/related_nonloop.js"></script>
+  <script src="./assets/js/behaviors/related_budge.js"></script>
+</html>
